@@ -1,5 +1,5 @@
 # Setup
-In order to setup your environemnt, you need to open your terminal command or command line and do the following:
+In order to setup your environment, you need to open your terminal command or command line and do the following:
 1. Clone this repo to your local machine. \
    ```git clone https://github.com/gmanaster54/interactions_spring_25.git ```
 2. Cd into the repo with \
