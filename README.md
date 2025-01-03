@@ -14,7 +14,7 @@ https://googlechromelabs.github.io/chrome-for-testing/
 7. In runner.py, update `building` to your building name. It is currently set to `North Avenue East`.
 
 # Running
-1. Fill out the `residents.xlsx` excel spreadsheet with your interactions row by row. Be not to change the headers and that everythign is spelled and formatted correctly.
+1. Fill out the `residents.xlsx` excel spreadsheet with your interactions row by row. Be sure not to change the headers and that everything is spelled and formatted correctly.
 2. Run the runner.py python file. \
    ```python runner.py ``` or ```python3 runner.py```
 3. If things are working correctly, a new tab should open to the roompact sign in page. Sign in, and then type `y` and press enter in your terminal.
