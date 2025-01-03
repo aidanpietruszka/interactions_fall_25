@@ -7,7 +7,7 @@ In order to setup your environment, you need to open your terminal command or co
 4. Makse sure python is installed on your computer.  \
    Running ```python --version``` or ```python3 --version``` should display `python 3.*`
 5. Install a few Python packages. These are found in requirments.txt, and can be downloaded with \
-```pip install -r requirments.txt```
+```pip install -r requirements.txt```
 6. Download the chromedriver binary matching both your computers chrome version and OS, and place the binary in your PATH. It would be easiest to place the driver in the same directory as this repo. The drivers can be found at \
 https://googlechromelabs.github.io/chrome-for-testing/
 7. In runner.py, update `building` to your building name. It is currently set to `North Avenue East`.
