@@ -1,5 +1,6 @@
 # Setup
 In order to setup your environemnt, you need to:
+0. Clone this repo to your local machine.
 1. Have python installed on your computer.
 2. Install a few Python packages. These are found in requirments.txt, and can be downloaded with \
 ```pip install -r requirments.txt```
