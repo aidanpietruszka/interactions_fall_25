@@ -6,6 +6,7 @@ In order to setup your environemnt, you need to:
 ```pip install -r requirments.txt```
 3. Download the chromedriver binary matching your computers chrome version and OS, and place the binary in your PATH. It would be easiest to place the driver in the same directory as this repo. The drivers can be found at \
 https://googlechromelabs.github.io/chrome-for-testing/
+4. In runner.py, update building to your building name.
 
 # Running
 1. Fill out the `residents.xlsx` excel spreadsheet with your interactions row by row. Be not to change the headers and that everythign is spelled and formatted correctly.
