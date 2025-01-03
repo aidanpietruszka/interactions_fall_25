@@ -4,6 +4,8 @@ from selenium.webdriver.common.keys import Keys
 import pandas as pd
 import time
 
+building = "North Avenue East" # Replace if in different building
+
 def wait_for_sign_in():
     while True:
         response = input("Sign in, then press y and enter:\n").strip().lower()
@@ -56,7 +58,7 @@ def automate_form(data, form_url):
                 continue
             search_names[0].click()
 
-            building_field.send_keys("North Avenue East")
+            building_field.send_keys(building)
             time.sleep(2)
             search_buildings = driver.find_elements(By.CLASS_NAME, "forms-subscriptions-search-result-row")
             if len(search_names) == 0:
