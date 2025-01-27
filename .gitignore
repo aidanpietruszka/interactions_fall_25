@@ -3,3 +3,6 @@
 
 # Ignore the ChromeDriver executable
 chromedriver
+
+# Ignore the virtual environment
+env/
