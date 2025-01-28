@@ -41,8 +41,12 @@ def automate_form(data, form_url):
             driver.get(form_url)
             time.sleep(2) # Allow page load
             res_name = row['Resident Name']
+
+            # Choose format based on your excel sheet. Third is default.
             #date = (str(row['Date'])[6:10] + '/' + str(row['Date'])[0:4]).replace('-', '/')
-            date = (str(row['Date'])[0:5] + '/' + str(row['Date'])[6:10]).replace('-', '/')
+            #date = (str(row['Date'])[0:5] + '/' + str(row['Date'])[6:10]).replace('-', '/')
+            date = (str(row['Date'])[5:10] + '/' + str(row['Date'])[0:4]).replace('-', '/')
+
             description = row["Description"]
             theme = row['Theme']
             
