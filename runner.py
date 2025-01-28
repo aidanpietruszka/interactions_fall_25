@@ -4,7 +4,7 @@ from selenium.webdriver.common.keys import Keys
 import pandas as pd
 import time
 
-building = "North Avenue North" # Replace if in different building
+building = "North Avenue East" # Replace if in different building (ex. North Avenue North/West/South)
 
 def wait_for_sign_in():
     while True:
