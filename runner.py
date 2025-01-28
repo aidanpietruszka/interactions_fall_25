@@ -4,7 +4,7 @@ from selenium.webdriver.common.keys import Keys
 import pandas as pd
 import time
 
-building = "North Avenue East" # Replace if in different building
+building = "North Avenue East" # Replace if in different building (ex. North Avenue North/West/South)
 
 def wait_for_sign_in():
     while True:
@@ -41,7 +41,12 @@ def automate_form(data, form_url):
             driver.get(form_url)
             time.sleep(2) # Allow page load
             res_name = row['Resident Name']
+
+            # Choose format based on your excel sheet. Third is default.
+            #date = (str(row['Date'])[6:10] + '/' + str(row['Date'])[0:4]).replace('-', '/')
+            #date = (str(row['Date'])[0:5] + '/' + str(row['Date'])[6:10]).replace('-', '/')
             date = (str(row['Date'])[5:10] + '/' + str(row['Date'])[0:4]).replace('-', '/')
+
             description = row["Description"]
             theme = row['Theme']
             
@@ -88,6 +93,14 @@ def automate_form(data, form_url):
                 continue
             search_themes[0].click()
             
+            time.sleep(2)
+
+            if 'Resident opted out' in description:
+                optout_button = driver.find_element(By.XPATH, "//input[contains(@aria-label, 'Yes')]")
+            else:
+                optout_button = driver.find_element(By.XPATH, "//input[@aria-label='No']")
+            optout_button.click()
+
             time.sleep(2)
 
             submit_button = driver.find_element(By.XPATH, "//button[contains(@class, 'forms-submit-btn')]")

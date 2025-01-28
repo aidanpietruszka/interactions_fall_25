@@ -1,4 +1,4 @@
-#### Note: This script is configured for the Fall 24 form. It will be updated to the Spring 25 form once Roompact is updated.
+#### Note: This script is configured for the Spring 25 form.
 # Setup
 In order to setup your environment, you need to open your terminal command or command line and do the following:
 1. Clone this repo to your local machine. \
@@ -22,4 +22,4 @@ https://googlechromelabs.github.io/chrome-for-testing/
 5. Check the output in the terminal to ensure that each interaction is properly submitted. It will output: \
 ``` Submitted: <Resident Name> ``` for each sucessful submission.  
 # Troubleshooting
-Is you run into issues, feel free to email or teams me at gmanaster3@gatech.edu
+Is you run into issues, feel free to email or teams at aryan.mittal@gatech.edu or gmanaster3@gatech.edu.
