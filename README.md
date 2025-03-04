@@ -23,9 +23,9 @@ https://googlechromelabs.github.io/chrome-for-testing/
 ``` Submitted: <Resident Name> ``` for each sucessful submission.
 
 # Running Multi-Threaded Mode
-Want to save time? Run in GOAT mode.
+Want to save time? Run in GOAT mode, submitting in `n` tabs at the same time (currenly set to 24).
 1. Run the runner_threaded.py python file. \
-   ```python runner.py ``` or ```python3 runner.py```
+   ```python runner_threaded.py ``` or ```python3 runner_threaded.py```
 2. Form will continue retrying until all residents in excel sheet are submitted, or will list repeated name failures to be corrected.
 # Troubleshooting
 Is you run into issues, feel free to email or teams at aryan.mittal@gatech.edu or gmanaster3@gatech.edu.
