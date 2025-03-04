@@ -81,9 +81,11 @@ def fill_form_for_chunk(thread_id, data_chunk, form_url, cookies, error_list, er
         except Exception as e:
             print(f"[Thread {thread_id}] Failed to add cookie: {cookie} Error: {e}")
     driver.get(form_url)  # Refresh so cookies are applied
+    # Extra refresh to beat any load issues
     time.sleep(2)
-    driver.get(form_url) # Refresh again to beat the load failure bug
+    driver.get(form_url)
     time.sleep(2)
+    
     for _, row in data_chunk.iterrows():
         try:
             driver.get(form_url)
@@ -184,14 +186,44 @@ def fill_form_for_chunk(thread_id, data_chunk, form_url, cookies, error_list, er
     driver.quit()
     print(f"[Thread {thread_id}] Finished processing its chunk.")
 
+def run_submission_pass(data_df, form_url, cookies, n):
+    """
+    Splits the given dataframe into n chunks and processes them concurrently.
+    Returns a list of resident names that failed submission.
+    """
+    n = n if n else 1
+    
+    chunk_size = math.ceil(len(data_df) / n)
+    threads = []
+    error_list = []
+    error_list_lock = threading.Lock()
+    
+    for i in range(n):
+        start_idx = i * chunk_size
+        end_idx = (i + 1) * chunk_size
+        data_chunk = data_df.iloc[start_idx:end_idx]
+        if data_chunk.empty:
+            continue
+        t = threading.Thread(
+            target=fill_form_for_chunk,
+            args=(i, data_chunk, form_url, cookies, error_list, error_list_lock)
+        )
+        t.start()
+        threads.append(t)
+        
+    for t in threads:
+        t.join()
+    
+    return error_list
+
 def main():
     file_path = "updated_residents.xlsx"  # Path to your Excel file
-    form_url = "https://roompact.com/forms/#/form/7odwkY"  # Replace with actual form URL
+    form_url = "https://roompact.com/forms/#/form/7odwkY"  # Replace with the actual form URL
 
     data = load_data(file_path)
     print("Loaded data.")
 
-    # Step 1: Open a master driver and sign in manually
+    # Step 1: Open a master driver and sign in manually, then extract cookies.
     master_driver = webdriver.Chrome()
     master_driver.get(form_url)
     time.sleep(2)
@@ -200,36 +232,38 @@ def main():
     print("Extracted cookies from signed-in session.")
     master_driver.quit()
 
-    # Step 2: Set number of parallel windows (driver instances)
-    n = 8
-    chunk_size = math.ceil(len(data) / n)
-    threads = []
-    error_list = []
-    error_list_lock = threading.Lock()
+    # Set number of parallel windows (driver instances)
+    n = 24
 
-    # Step 3: Start threads—each thread creates its own driver, loads cookies, and processes its chunk
-    for i in range(n):
-        start_idx = i * chunk_size
-        end_idx = (i + 1) * chunk_size
-        data_chunk = data.iloc[start_idx:end_idx]
-        t = threading.Thread(
-            target=fill_form_for_chunk,
-            args=(i, data_chunk, form_url, cookies, error_list, error_list_lock)
-        )
-        t.start()
-        threads.append(t)
+    # --- Pass 1: Process entire dataset ---
+    print("Running Pass 1...")
+    error_list = run_submission_pass(data, form_url, cookies, n)
+    print("Pass 1 errors:", error_list)
 
-    # Wait for all threads to complete
-    for t in threads:
-        t.join()
+    error_size = 2 ** 31 - 1  # Initialize to a large number
+    pass_num = 2
+    while error_size != len(error_list):
+        error_size = len(error_list)
+        retry_data = data[data["Resident Name"].isin(error_list)]
+        print("Running Pass 2 for these errors:", error_list)
+        threads = min(n, len(retry_data))
+        error_list = run_submission_pass(retry_data, form_url, cookies, threads)
+        print(f'Pass {pass_num} errors: ', error_list)
+        pass_num += 1
 
-    # Write any errors to file
+    # Write remaining errors to file (those that failed all three passes)
     if error_list:
         with open("submission_failure.txt", "w") as f:
             for err in error_list:
                 f.write(f"{err}\n")
-        print("Errors have been written to submission_failure.txt")
-    print("Script complete. Errors:", error_list)
+        print("Final errors have been written to submission_failure.txt")
+        print("Script complete. Final error list:", error_list)
+        print("Check the excel sheet for any errors with these names. Does this student show up in roompact?")
+    else:
+        print(f'All submissions succeeded after {pass_num} passes.')
+        print('100% ACCURACY!!!')
+
+
 
 if __name__ == "__main__":
     main()
