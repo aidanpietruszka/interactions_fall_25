@@ -20,6 +20,12 @@ https://googlechromelabs.github.io/chrome-for-testing/
 3. If things are working correctly, a new tab should open to the roompact sign in page. Sign in, and then type `y` and press enter in your terminal.
 4. Selenium should take over your chrome tab, filling in the information from your spreadsheet into the roompact form.
 5. Check the output in the terminal to ensure that each interaction is properly submitted. It will output: \
-``` Submitted: <Resident Name> ``` for each sucessful submission.  
+``` Submitted: <Resident Name> ``` for each sucessful submission.
+
+# Running Multi-Threaded Mode
+Want to save time? Run in GOAT mode.
+1. Run the runner_threaded.py python file. \
+   ```python runner.py ``` or ```python3 runner.py```
+2. Form will continue retrying until all residents in excel sheet are submitted, or will list repeated name failures to be corrected.
 # Troubleshooting
 Is you run into issues, feel free to email or teams at aryan.mittal@gatech.edu or gmanaster3@gatech.edu.
