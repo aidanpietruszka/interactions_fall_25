@@ -192,7 +192,7 @@ def run_submission_pass(data_df, form_url, cookies, n):
     Returns a list of resident names that failed submission.
     """
     n = n if n else 1
-    
+
     chunk_size = math.ceil(len(data_df) / n)
     threads = []
     error_list = []
@@ -245,7 +245,6 @@ def main():
     while error_size != len(error_list):
         error_size = len(error_list)
         retry_data = data[data["Resident Name"].isin(error_list)]
-        print("Running Pass 2 for these errors:", error_list)
         threads = min(n, len(retry_data))
         error_list = run_submission_pass(retry_data, form_url, cookies, threads)
         print(f'Pass {pass_num} errors: ', error_list)
