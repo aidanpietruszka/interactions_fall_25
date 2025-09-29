@@ -6,8 +6,9 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
+from datetime import datetime
 
-BUILDING = "North Avenue East"  # Replace if in a different building
+BUILDING = "North Avenue South"  # Replace if in a different building
 
 def wait_for_sign_in():
     """Wait for the user to sign in by prompting until 'y' is entered."""
@@ -55,7 +56,7 @@ def clear_submission(driver):
         date_field = driver.find_element(By.CLASS_NAME, "elm-datepicker--input")
         clear_field(date_field)
         # Clear the description field
-        description_field = driver.find_element(By.ID, "desc_resp_sub_YmoBEE")
+        description_field = driver.find_element(By.ID, "desc_resp_sub_0GmBjQ")
         clear_field(description_field)
     except Exception as error:
         print("Error clearing submission fields:", error)
@@ -86,7 +87,7 @@ def automate_form(data, form_url):
 
     error_list = []  # Track any names that failed submission
 
-    for _, row in data.iterrows():
+    for _, row in data.iloc[1:].iterrows():  # Skip first two rows if they are headers
         try:
             driver.get(form_url)
             time.sleep(2)  # Allow page load
@@ -94,8 +95,10 @@ def automate_form(data, form_url):
             time.sleep(2)
 
             res_name = row["Resident Name"]
+            if not res_name or pd.isna(res_name):
+                break;  # Stop if resident name is empty or NaN
             # Format date as MM/DD/YYYY
-            date_str = (str(row["Date"])[5:10] + "/" + str(row["Date"])[0:4]).replace("-", "/")
+            date_str = row["Date"][:10]  # Extract the first 10 characters
             theme = row["Theme"]
             description = row["Description"]
 
@@ -138,7 +141,7 @@ def automate_form(data, form_url):
             time.sleep(1)
 
             # Fill out the description field
-            description_field = driver.find_element(By.ID, "desc_resp_sub_YmoBEE")
+            description_field = driver.find_element(By.ID, "desc_resp_sub_0GmBjQ")
             description_field.send_keys(description)
             time.sleep(1)
 
@@ -195,8 +198,8 @@ def automate_form(data, form_url):
 
 
 def main():
-    file_path = "updated_residents.xlsx"  # Path to your Excel file
-    form_url = "https://roompact.com/forms/#/form/7odwkY"  # Replace with the actual form URL
+    file_path = "residents.xlsx"  # Path to your Excel file
+    form_url = "https://roompact.com/forms/#/form/xvqQqq"  # Replace with the actual form URL
 
     data = load_data(file_path)
     print("Loaded data. Beginning interaction submission...")
